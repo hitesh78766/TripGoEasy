@@ -74,31 +74,15 @@ import axios from 'axios';
 import { ref } from 'vue'
 import { da } from 'vuetify/locale';
 
-// const data = ref([
-//     {
-//         id: 1,
-//         URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_icon%2Fcity_icon_1724848009_66cf1789bd973.jpg&w=2048&q=75",
-//         text: "Bangkok"
-//     },
-//     {
-//         id: 2,
-//         URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_icon%2Fcity_icon_1728297536_6703ba401e129.jpg&w=2048&q=75",
-//         text: "Port Blair"
-//     },
-//     {
-//         id: 3,
-//         URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_icon%2Fcity_icon_1728297581_6703ba6d00277.jpg&w=2048&q=75",
-//         text: "Leh"
-//     },
-// ])
+
 
 const data = ref([]);
 
 const fetchCity = async () => {
     const response = await axios.get("https://tripgoeasy.trackitinerary.com/apis/packages/package_category_with_city")
-    console.log("the city is :", response.data.data.data)
+    // console.log("the city is :", response.data.data.data)
     data.value = response.data.data.data
-    console.log("the data is :", data.value)
+    // console.log("the data is :", data.value)
 }
 
 fetchCity()

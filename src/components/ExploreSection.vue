@@ -18,52 +18,83 @@
       Curating Unparalleled Travel Experiences, One Journey at a Time
     </p>
 
-    <!-- Tabs -->
-    <div class="d-flex align-center justify-center text-uppercase py-3 px-3">
-      <div class="px-4 py-1 rounded-pill" :class="selectedTab === 'Tour' ? 'bg-light' : 'hover-btn'"
-        @click="selectedTab = 'Tour'">
+    <v-container>
+      <v-tabs v-model="selectedTab" background-color="transparent" grow slider-color="transparent"
+      class="d-flex align-center justify-center text-uppercase py-3 px-3">
+      
+      <v-tab value="Tour" class="px-4 py-1 rounded-pill" :class="selectedTab === 'Tour' ? 'bg-light' : ''">
         <p :class="selectedTab === 'Tour' ? 'text-dark' : 'text-light'" class="m-0 font-weight-regular btn-option">Tour
         </p>
-      </div>
+      </v-tab>
 
-      <div class="px-4 py-1 rounded-pill" :class="selectedTab === 'Activities' ? 'bg-light' : 'hover-btn'"
-        @click="selectedTab = 'Activities'">
+      <v-tab value="Activities" class="px-4 py-1 rounded-pill" :class="selectedTab === 'Activities' ? 'bg-light' : ''">
         <p :class="selectedTab === 'Activities' ? 'text-dark' : 'text-light'"
           class="m-0 font-weight-regular btn-option">Activities</p>
-      </div>
+      </v-tab>
 
-      <div class="px-4 py-1 rounded-pill" :class="selectedTab === 'Flight' ? 'bg-light' : 'hover-btn'"
-        @click="selectedTab = 'Flight'">
+      <v-tab value="Flight" class="px-4 py-1 rounded-pill" :class="selectedTab === 'Flight' ? 'bg-light' : ''">
         <p :class="selectedTab === 'Flight' ? 'text-dark' : 'text-light'" class="m-0 font-weight-regular btn-option">
           Flight</p>
-      </div>
+      </v-tab>
 
-      <div class="px-4 py-1 rounded-pill" :class="selectedTab === 'Railway' ? 'bg-light' : 'hover-btn'"
-        @click="selectedTab = 'Railway'">
-        <p :class="selectedTab === 'Railway' ? 'text-dark' : 'text-light'" class=" m-0 font-weight-regular btn-option">
+      <v-tab value="Railway" class="px-4 py-1 rounded-pill" :class="selectedTab === 'Railway' ? 'bg-light' : ''">
+        <p :class="selectedTab === 'Railway' ? 'text-dark' : 'text-light'" class="m-0 font-weight-regular btn-option">
           Railway</p>
-      </div>
-    </div>
+      </v-tab>
+    </v-tabs>
 
-    <!-- Diaplay the tabs by conditionally -->
-    <div class="d-flex align-center justify-center">
-      <template v-if="selectedTab === 'Tour'">
-        <input type="text" class="bg-light rounded-pill input-box" placeholder="Search for Himachal" />
+    <v-tabs-window v-model="selectedTab">
+      <!-- Tour Tab Content -->
+      <v-tabs-window-item value="Tour">
+        <v-menu location="bottom" :close-on-content-click="false" :close-on-scroll="true" offset-y>
+          <template v-slot:activator="{ props }">
+            <input v-bind="props" type="text" class="bg-light rounded-pill input-box" @input="handleScroll"
+              placeholder="Search for Himachal" />
+          </template>
+
+          <VCard v-if="showCard">
+            <v-card-text class="main-menu-text-div">
+              <v-text-field label="" class="text-dark bg-light" placeholder="Search for destination..."></v-text-field>
+              <p class="trip-duration">Trip Durations</p>
+              <div class="d-flex mb-3 align-center duration-container">
+                <div class="days-duration-div">
+                  <p class="m-0">Upto 1 day</p>
+                </div>
+                <div class="days-duration-div">
+                  <p class="m-0">2 to 3 days</p>
+                </div>
+                <div class="days-duration-div">
+                  <p class="m-0">5 to 7 days</p>
+                </div>
+                <div class="days-duration-div">
+                  <p class="m-0">7+ days</p>
+                </div>
+              </div>
+              <div style="border: 1px solid rgba(218, 218, 218, 1);"></div>
+              <p class="mt-2 trip-duration">Price</p>
+              <v-range-slider v-model="value" :min="0" :max="500000" :step="1" thumb-label ticks="always" />
+              <div style="border: 1px solid rgba(218, 218, 218, 1);"></div>
+              <div class="mt-2 d-flex justify-content-end">
+                <button class="search-now-btn">SEARCH FOR TRIP</button>
+              </div>
+            </v-card-text>
+          </VCard>
+        </v-menu>
         <div class="search-icon">
           <i class="fas fa-search"></i>
         </div>
-      </template>
+      </v-tabs-window-item>
 
-      <template v-else-if="selectedTab === 'Activities'">
+      <!-- Activities Tab Content -->
+      <v-tabs-window-item value="Activities">
         <div class="d-flex align-center justify-content-between activity-section">
-
           <div style="border-right: 1px solid #01008036;">
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
               <div>
                 <p class="m-0 tabs-text">Location</p>
                 <div>
-                  <input class="activity-input" type="text" placeholder="Where are you going">
+                  <input class="activity-input" type="text" placeholder="Where are you going" />
                 </div>
               </div>
             </div>
@@ -71,7 +102,7 @@
 
           <div style="border-right: 1px solid #01008036;">
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/HeroDate.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/HeroDate.svg" alt="" />
               <div>
                 <p class="m-0 ms-1 me-5 tabs-text">Date</p>
               </div>
@@ -80,7 +111,7 @@
 
           <div>
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/HeroBag.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/HeroBag.svg" alt="" />
               <div>
                 <p class="m-0 tabs-text">No. of Person</p>
                 <div>
@@ -95,22 +126,19 @@
               <button class="text-uppercase search-now-btn">Search Now</button>
             </div>
           </div>
-
-
         </div>
-      </template>
+      </v-tabs-window-item>
 
-      <template v-else-if="selectedTab === 'Flight'">
-
+      <!-- Flight Tab Content -->
+      <v-tabs-window-item value="Flight">
         <div class="d-flex align-center justify-content-between position-relative activity-section">
-
           <div style="border-right: 1px solid #01008036;">
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
               <div>
                 <p class="m-0 tabs-text">From</p>
                 <div>
-                  <input class="activity-input" type="text" placeholder="Where you Start">
+                  <input class="activity-input" type="text" placeholder="Where you Start" />
                 </div>
               </div>
             </div>
@@ -118,11 +146,11 @@
 
           <div style="border-right: 1px solid #01008036;">
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
               <div>
                 <p class="m-0 tabs-text">TO</p>
                 <div>
-                  <input class="activity-input" type="text" placeholder="Where you going ?">
+                  <input class="activity-input" type="text" placeholder="Where you going ?" />
                 </div>
               </div>
             </div>
@@ -130,7 +158,7 @@
 
           <div style="border-right: 1px solid #01008036;">
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/HeroDate.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/HeroDate.svg" alt="" />
               <div>
                 <p class="m-0 ms-1 me-3 tabs-text">Date</p>
               </div>
@@ -139,7 +167,7 @@
 
           <div>
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/HeroBag.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/HeroBag.svg" alt="" />
               <div>
                 <p class="m-0 tabs-text">No. of Person</p>
                 <div>
@@ -154,21 +182,20 @@
               <button class="text-uppercase search-now-btn">Search Now</button>
             </div>
           </div>
-
         </div>
         <p class="text-uppercase coming-soon-text">Coming Soon</p>
-      </template>
+      </v-tabs-window-item>
 
-      <template v-else-if="selectedTab === 'Railway'">
+      <!-- Railway Tab Content -->
+      <v-tabs-window-item value="Railway">
         <div class="d-flex align-center justify-content-between position-relative activity-section">
-
           <div style="border-right: 1px solid #01008036;">
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
               <div>
                 <p class="m-0 tabs-text">From</p>
                 <div>
-                  <input class="activity-input" type="text" placeholder="Where you Start">
+                  <input class="activity-input" type="text" placeholder="Where you Start" />
                 </div>
               </div>
             </div>
@@ -176,11 +203,11 @@
 
           <div style="border-right: 1px solid #01008036;">
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
               <div>
                 <p class="m-0 tabs-text">TO</p>
                 <div>
-                  <input class="activity-input" type="text" placeholder="Where you going ?">
+                  <input class="activity-input" type="text" placeholder="Where you going ?" />
                 </div>
               </div>
             </div>
@@ -188,7 +215,7 @@
 
           <div style="border-right: 1px solid #01008036;">
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/HeroDate.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/HeroDate.svg" alt="" />
               <div>
                 <p class="m-0 ms-1 me-3 tabs-text">Date</p>
               </div>
@@ -197,7 +224,7 @@
 
           <div>
             <div class="d-flex align-center">
-              <img src="https://tripgoeasy.com/Assets/Icons/HeroBag.svg" alt="">
+              <img src="https://tripgoeasy.com/Assets/Icons/HeroBag.svg" alt="" />
               <div>
                 <p class="m-0 tabs-text">No. of Person</p>
                 <div>
@@ -212,17 +239,22 @@
               <button class="text-uppercase search-now-btn">Search Now</button>
             </div>
           </div>
-
         </div>
         <p class="text-uppercase coming-soon-text">Coming Soon</p>
-      </template>
+      </v-tabs-window-item>
 
-    </div>
+    </v-tabs-window>
+    </v-container>
+
+
+
+
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { VTextField } from 'vuetify/components';
 
 const texts = ref(["Explore", "Connect", "Thrive", "Memories"]);
 const currentIndex = ref(0);
@@ -235,12 +267,13 @@ onMounted(() => {
 });
 
 // this is for to change the bg of tabs and also change the content
-const selectedTab = ref('Tour');
+const selectedTab = ref('Tour')         // default selected tab
+const showCard = ref(true)              // controls VCard visibility
+const value = ref([0, 500000])
 
 </script>
 
 <style scoped>
-/* existing CSS from your design (no change) */
 
 .bg-image {
   background-image: url("https://tripgoeasy.com/Assets/Images/hero_banner.jpg");
@@ -337,7 +370,7 @@ const selectedTab = ref('Tour');
 }
 
 .input-box {
-  width: 60%;
+  width: 82%;
   margin-top: 30px;
   padding: 18px;
   text-align: center;
@@ -347,7 +380,7 @@ const selectedTab = ref('Tour');
 
 .search-icon {
   position: absolute;
-  right: 22%;
+  right: 11%;
   top: 67%;
   transform: translateY(-50%);
   color: gray;
@@ -359,7 +392,7 @@ const selectedTab = ref('Tour');
 .activity-section {
   background-color: rgba(246, 246, 246, 1);
   border-radius: .375rem;
-  width: 60%;
+  width: 82%;
   margin-top: 30px;
   padding: .75rem 1.25rem;
 
@@ -412,5 +445,34 @@ const selectedTab = ref('Tour');
   font-weight: 600;
   background-color: #00000080;
   padding: 1.1rem 1.25rem
+}
+
+/* v-menu css */
+
+.trip-duration {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 1);
+}
+
+.duration-container {
+  color: rgba(132, 129, 129, 1);
+  font-size: 14px;
+  gap: .75rem
+}
+
+.days-duration-div {
+  padding: .25rem .75rem;
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(234, 230, 230, 1);
+  border-radius: 30px;
+}
+
+.main-menu-text-div {
+  background-color: rgba(246, 246, 246, 1);
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+  border-bottom-right-radius: .25rem;
+  border-bottom-left-radius: .25rem;
+  overflow: hidden;
 }
 </style>

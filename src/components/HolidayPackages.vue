@@ -35,63 +35,8 @@
             </v-col>
 
 
-            <v-col cols="4" v-for="(packageData) in holidayPackages.slice(0,9)" :key="packageData.key">
-                <div class="holiday-content p-0 elevation-4">
-                    <div class="holiday-packages-section">
-                        <div>
-                            <v-img height="200px" :src="packageData.pdf_image" cover class="rounded">
-
-                                <div class="w-full p-3 d-flex justify-content-between temp-btns">
-                                    <p class="temp-content m-0">4 <span><i class="fa-solid fa-moon"></i></span> icon/ 3<span><i class="fa-solid fa-sun"></i></span></p>
-                                    <p class="sale-content m-0">Best Sale!</p>
-                                </div>
-                            </v-img>
-                        </div>
-
-
-                        <div class="heading-seciton">
-                            <h3 class="ms-2">{{ packageData.package_name }}</h3>
-                        </div>
-
-                        <div class="d-flex flex-wrap align-center justify-content-evenly included-options">
-                            <div class="d-flex align-center ms-1 included-option-font"
-                                v-for="(item) in packageData.servies" :key="item.id">
-                                <v-img :src="item.icon" width="24" height="24" class="me-2"></v-img>
-                                {{ item.service }}
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-center justify-content-around mt-2">
-                            <div class="d-flex align-center">
-                                <span class="discount-price">₹ {{ packageData.discount }}</span>
-                                <span class="main-price text-decoration-line-through ms-2">{{ packageData.starting_cost
-                                    }}</span>
-                            </div>
-
-                            <div class="d-flex align-center">
-                                <i class="fa-solid fa-star me-1" style="font-size: 14px; color: yellow;"></i>
-                                <p class="rating m-0" style="font-size: 14px; font-weight: 600;">{{ packageData.rating
-                                    }}
-                                </p>
-                                <p class="mb-0 review ms-1" style="font-size: 13px;">(354 reviews)</p>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-center justify-content-between mt-4">
-                            <div class="ms-2 mb-3 ">
-                                <button class="text-uppercase explore-btn">Explore</button>
-                            </div>
-
-                            <div class="me-2 mb-3  explore-icons">
-                                <i class="fa-solid fa-phone p-1"></i>
-                                <i class="fa-brands fa-whatsapp p-1"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </v-col>
-
-
+            <!-- pass the data thorough the props -->
+            <HolidayPackagesCard :holiday-packages="holidayPackages" />
         </v-row>
 
     </div>
@@ -99,174 +44,9 @@
 
 <script setup>
 
-import { ref  } from 'vue'
+import { ref } from 'vue'
 import axios from 'axios';
-
-// const holidayPackages = ref([
-//     {
-//         title: 'Baku with Absheron Tour 3N 4D',
-//         image: 'https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fbanner_images%2Fbanner_images1740827813_67c2eca50cedf.jpg&w=1920&q=75',
-//         price: '₹ 12000/-',
-//         mainPrice: '₹ 16900',
-//         rating: '4.5 / 5',
-//         reviews: '(354 reviews)',
-//         options: [
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485933_66c9912d78fe4.png&w=1920&q=75",
-//                 text: " Hotel"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485505_66c98f813b4c4.png&w=1920&q=75",
-//                 text: " Cab"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485561_66c98fb902953.png&w=1920&q=75",
-//                 text: " Breakfast"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485789_66c9909d4235a.png&w=1920&q=75",
-//                 text: " Sightseeing"
-//             },
-//         ],
-//     },
-
-//     {
-//         title: 'Shimla Manali Special by Volvo Ex Delhi 5N 6D',
-//         image: 'https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fstatic_images%2F1.jpg&w=1920&q=75',
-//         price: '₹ 13500/-',
-//         mainPrice: '₹ 28500',
-//         rating: '4.5 / 5',
-//         reviews: '(354 reviews)',
-//         options: [
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485933_66c9912d78fe4.png&w=1920&q=75",
-//                 text: " Hotel"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485505_66c98f813b4c4.png&w=1920&q=75",
-//                 text: " Cab"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485561_66c98fb902953.png&w=1920&q=75",
-//                 text: " Breakfast"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485789_66c9909d4235a.png&w=1920&q=75",
-//                 text: " Sightseeing"
-//             },
-//         ],
-//     },
-
-//     {
-//         title: 'Shimla Manali ex Delhi 5N 6D',
-//         image: 'https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fbanner_images%2Fbanner_images1724684506_66cc98da13428.jpg&w=1920&q=75',
-//         price: '₹ 13900/-',
-//         mainPrice: '₹ 19900',
-//         rating: '4.5 / 5',
-//         reviews: '(354 reviews)',
-//         options: [
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485933_66c9912d78fe4.png&w=1920&q=75",
-//                 text: " Hotel"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485505_66c98f813b4c4.png&w=1920&q=75",
-//                 text: " Cab"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485561_66c98fb902953.png&w=1920&q=75",
-//                 text: " Breakfast"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485789_66c9909d4235a.png&w=1920&q=75",
-//                 text: " Sightseeing"
-//             },
-//         ],
-//     },
-
-
-//     {
-//         title: 'All Himachal with Amritsar Ex-Delhi',
-//         image: 'https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fbanner_images%2Fbanner_images1724744342_66cd8296cdd7d.jpg&w=1920&q=75',
-//         price: '₹ 25900/-',
-//         mainPrice: '₹ 30600',
-//         rating: '4.5 / 5',
-//         reviews: '(354 reviews)',
-//         options: [
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485933_66c9912d78fe4.png&w=1920&q=75",
-//                 text: " Hotel"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485505_66c98f813b4c4.png&w=1920&q=75",
-//                 text: " Cab"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485561_66c98fb902953.png&w=1920&q=75",
-//                 text: " Breakfast"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485789_66c9909d4235a.png&w=1920&q=75",
-//                 text: " Sightseeing"
-//             },
-//         ],
-//     },
-
-//     {
-//         title: 'Shimla Manali With Kasol',
-//         image: 'https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fbanner_images%2Fbanner_images1724758068_66cdb8340655a.jpg&w=1920&q=75',
-//         price: '₹ 14900/-',
-//         mainPrice: '₹ 18500',
-//         rating: '4.5 / 5',
-//         reviews: '(354 reviews)',
-//         options: [
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485933_66c9912d78fe4.png&w=1920&q=75",
-//                 text: " Hotel"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485505_66c98f813b4c4.png&w=1920&q=75",
-//                 text: " Cab"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485561_66c98fb902953.png&w=1920&q=75",
-//                 text: " Breakfast"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485789_66c9909d4235a.png&w=1920&q=75",
-//                 text: " Sightseeing"
-//             },
-//         ],
-//     },
-
-
-//     {
-//         title: 'Manali Special by Volvo Ex Delhi',
-//         image: 'https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fstatic_images%2F4.jpg&w=1920&q=75',
-//         price: '₹ 10500/-',
-//         mainPrice: '₹ 18500',
-//         rating: '4.5 / 5',
-//         reviews: '(354 reviews)',
-//         options: [
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485933_66c9912d78fe4.png&w=1920&q=75",
-//                 text: " Hotel"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485505_66c98f813b4c4.png&w=1920&q=75",
-//                 text: " Cab"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485561_66c98fb902953.png&w=1920&q=75",
-//                 text: " Breakfast"
-//             },
-//             {
-//                 URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fservices%2Fservice_icon1724485789_66c9909d4235a.png&w=1920&q=75",
-//                 text: " Sightseeing"
-//             },
-//         ],
-//     },
-// ])
+import HolidayPackagesCard from './HolidayPackagesCard.vue'
 
 const reviews = ref([
     {
@@ -276,15 +56,15 @@ const reviews = ref([
 
 const holidayPackages = ref([]);
 
-const fetchPackages = async () =>{
+const fetchPackages = async () => {
     try {
         const response = await axios.get("https://tripgoeasy.trackitinerary.com/apis/packages/")
         // console.log("the response is : " , response)
-         holidayPackages.value = response.data.data.data
+        holidayPackages.value = response.data.data.data
         // console.log("the holiday value is :" , holidayPackages.value)
 
     } catch (error) {
-        console.log("The error is : " , error)
+        console.log("The error is : ", error)
     }
 }
 
@@ -439,7 +219,7 @@ fetchPackages()
     border-radius: 5px;
 }
 
-.temp-content{
+.temp-content {
     background-color: rgba(0, 0, 0, 1);
     color: white;
     border-radius: .25rem;
@@ -451,7 +231,7 @@ fetchPackages()
     font-size: 10px;
 }
 
-.sale-content{
+.sale-content {
     background: linear-gradient(0.25turn, #010080, #bc000b) !important;
     color: white;
     border-radius: .25rem;
