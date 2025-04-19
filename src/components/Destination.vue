@@ -38,7 +38,7 @@
                 </div>
             </v-col>
 
-            <v-row>
+            <v-row style="height: 100%; max-height: 580px; overflow: hidden;">
                 <v-col cols="6">
                     <v-col cols="12" v-for="item in data.slice(0,3)" :key="item.id" class="p-2">
                         <div class="images-section" :style="{ backgroundImage: `url(${item.main_image})` }">
