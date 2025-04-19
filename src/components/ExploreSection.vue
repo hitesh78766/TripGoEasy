@@ -25,6 +25,7 @@
 
       <!-- v-tabs css  -->
       <v-container>
+
         <v-tabs v-model="selectedTab" background-color="transparent" grow slider-color="transparent"
           class="d-flex align-center justify-center text-uppercase py-3 px-3">
 
@@ -56,8 +57,8 @@
         <v-tabs-window v-model="selectedTab">
           <!-- Tour Tab Content -->
           <v-tabs-window-item class="d-flex justify-content-center" value="Tour">
-            <v-menu location="bottom" :close-on-content-click="false" :close-on-scroll="true" offset-y>
-              <template v-slot:activator="{ props }">
+            <v-menu location="bottom" :close-on-content-click="false" :close-on-scroll="true" offset-y v-if="selectedTab === 'Tour'">
+              <template v-slot:activator="{ props }" v-if="selectedTab === 'Tour'">
                 <input v-bind="props" type="text" class="bg-light rounded-pill input-box" @input="handleScroll"
                   placeholder="Search for Himachal" />
               </template>
@@ -91,14 +92,15 @@
                 </v-card-text>
               </VCard>
             </v-menu>
+            
             <div class="search-icon">
               <i class="fas fa-search"></i>
             </div>
           </v-tabs-window-item>
 
           <!-- Activities Tab Content -->
-          <v-tabs-window-item value="Activities">
-            <div class="d-flex align-center justify-content-between activity-section">
+          <v-tabs-window-item class="d-flex justify-content-center" value="Activities">
+            <div class="d-flex align-center justify-content-between activity-section" v-if="selectedTab === 'Activities'">
               <div style="border-right: 1px solid #01008036;">
                 <div class="d-flex align-center">
                   <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
@@ -141,8 +143,8 @@
           </v-tabs-window-item>
 
           <!-- Flight Tab Content -->
-          <v-tabs-window-item value="Flight">
-            <div class="d-flex align-center justify-content-between position-relative activity-section">
+          <v-tabs-window-item class="d-flex justify-content-center" value="Flight">
+            <div class="d-flex align-center justify-content-between position-relative activity-section" v-if="selectedTab === 'Flight'">
               <div style="border-right: 1px solid #01008036;">
                 <div class="d-flex align-center">
                   <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
@@ -198,8 +200,8 @@
           </v-tabs-window-item>
 
           <!-- Railway Tab Content -->
-          <v-tabs-window-item value="Railway">
-            <div class="d-flex align-center justify-content-between position-relative activity-section">
+          <v-tabs-window-item class="d-flex justify-content-center" value="Railway">
+            <div class="d-flex align-center justify-content-between position-relative activity-section" v-if="selectedTab === 'Railway'">
               <div style="border-right: 1px solid #01008036;">
                 <div class="d-flex align-center">
                   <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
@@ -267,7 +269,7 @@
   </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import Drawer from './Drawer.vue'
 
 const texts = ref(["Explore", "Connect", "Thrive", "Memories"]);
@@ -508,15 +510,3 @@ const drawer = ref(false)
 
 
 
-
-
-
-
-
-
-<!-- @keydown.enter="handleEnter"
-const handleEnter = () => {
-  if (search.value && allStates.includes(search.value)) {
-    destinationSelected.value = true
-  }
-} -->

@@ -79,8 +79,7 @@
                                 <span>{{ selectedLabel }}</span>
                             </v-btn>
                         </div>
-
-
+                        
                         <!-- Button with selected family status -->
                         <div style="border-bottom: 4px solid #ca1c26;" class="ms-3">
                             <v-btn v-if="selectedFamilyStatus"

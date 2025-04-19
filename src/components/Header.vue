@@ -5,7 +5,7 @@
             <v-col xs="12" sm="6" md="2" lg="2" class="header-text">
                 <router-link to="/">
                     <img src="https://tripgoeasy.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo.3499e12d.png&w=1920&q=75"
-                    alt="" class="tripGoEasyImage">
+                        alt="" class="tripGoEasyImage">
                 </router-link>
             </v-col>
 
@@ -19,7 +19,7 @@
 
             <v-col xs="12" sm="12" md="2" lg="2" class="header-text d-flex align-items-center justify-content-end ">
                 <button class="enquery-btn">
-                    <span>Enquery</span>
+                    <span  @click="selectButton('activities')">Enquery</span>
                     <span>
                         <img src="https://tripgoeasy.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdownarrow.9ed52b8d.gif&w=750&q=75"
                             alt="" class="enquery-btn-image ">
@@ -33,7 +33,7 @@
             <v-col lg="1" class="p-0">
                 <button>
                     <img src="https://tripgoeasy.com/Assets/Icons/places/explore.svg" alt="" class="image">
-                    <p class="text-decoration-underline">Explore All</p>
+                    <p class="text-decoration-underline" >Explore All</p>
                 </button>
             </v-col>
 
@@ -48,17 +48,23 @@
 
             <v-col cols="12" md="2">
                 <div class="multibleBtns">
-                    <a href="">Tour</a>
-                    <button class="activities-btn">Activities</button>
+                    <a href="javascript:void(0)" :class="{ active: selectedButton === 'tour' }"
+                        @click="selectButton('tour')">Tour</a>
+                    <button class="activities-btn" :class="{ active: selectedButton === 'activities' }"
+                        @click="selectButton('activities')">Activities</button>
                 </div>
             </v-col>
 
         </v-row>
+
+        <Dialog v-model="showDialog" />
+
     </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import Dialog from './Dialog.vue';
+import { ref , watch} from 'vue'
 import axios from 'axios';
 
 // const data = ref(
@@ -121,9 +127,10 @@ import axios from 'axios';
 //     ]
 // )
 
-const data = ref([]);
+const data = ref([])
+const showDialog = ref(false)
 
-const fetchHeaderCities = async() =>{
+const fetchHeaderCities = async () => {
     const response = await axios.get("https://tripgoeasy.trackitinerary.com/apis/packages/package_category_with_city_tge")
     // console.log("the header  response is :" , response.data.data)
     data.value = response.data.data
@@ -131,6 +138,23 @@ const fetchHeaderCities = async() =>{
 }
 
 fetchHeaderCities()
+
+
+const selectedButton = ref('tour') 
+const selectButton = (buttonName) => {
+  selectedButton.value = buttonName
+  if (buttonName === 'activities') {
+    showDialog.value = true
+  }
+}
+// Reset to 'tour' when dialog is closed
+watch(showDialog, (newVal) => {
+    console.log("the new value is :" , newVal)
+  if (!newVal) {
+    selectedButton.value = 'tour'
+  }
+})
+
 </script>
 
 <style>
@@ -197,25 +221,24 @@ fetchHeaderCities()
     cursor: pointer;
 }
 
-.multibleBtns {
-    padding: 5px 6px;
-    display: flex;
-    gap: 10px;
-    align-items: center !important;
-    border: 1px solid #aba7a7;
-    border-radius: 2px;
+.multibleBtns a,
+.activities-btn {
+  padding: 2px 8px;
+  font-size: 18px;
+  font-weight: 400;
+  color: black;
+  background-color: transparent;
+  transition: all .3s linear;
+  border-radius: 3px;
+  text-decoration: none;
+  border: none;
 }
 
-.multibleBtns a {
-    padding: 2px 8px;
-    font-size: 18px;
-    font-weight: 400;
-    background-color: #ca1c26;
-    color: #fff;
-    transition: all .3s linear;
-    border-radius: 3px;
-    text-decoration: none;
+.multibleBtns .active {
+  background-color: #ca1c26;
+  color: white !important;
 }
+
 
 .activities-btn {
     font-size: 18px !important;
