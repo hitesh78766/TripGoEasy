@@ -36,7 +36,7 @@
 
 
             <!-- pass the data thorough the props -->
-            <HolidayPackagesCard :holiday-packages="holidayPackages" />
+            <HolidayPackagesCard :holiday-packages="cityStore.holidayPackages" />
         </v-row>
 
     </div>
@@ -44,8 +44,9 @@
 
 <script setup>
 
-import { ref } from 'vue'
+import { ref , onMounted } from 'vue'
 import axios from 'axios';
+import { Store } from '@/store/CityStore';
 import HolidayPackagesCard from './HolidayPackagesCard.vue'
 
 const reviews = ref([
@@ -54,21 +55,29 @@ const reviews = ref([
     }
 ])
 
-const holidayPackages = ref([]);
+const cityStore = Store()
 
-const fetchPackages = async () => {
-    try {
-        const response = await axios.get("https://tripgoeasy.trackitinerary.com/apis/packages/")
-        // console.log("the response is : " , response)
-        holidayPackages.value = response.data.data.data
-        // console.log("the holiday value is :" , holidayPackages.value)
+onMounted(() =>{
+    cityStore.fetchHolidayPackages()
+})
 
-    } catch (error) {
-        console.log("The error is : ", error)
-    }
-}
+// const holidayPackages = ref([]);
 
-fetchPackages()
+// const fetchPackages = async () => {
+//     try {
+//         const response = await axios.get("https://tripgoeasy.trackitinerary.com/apis/packages/")
+//         // console.log("the response is : " , response)
+//         holidayPackages.value = response.data.data.data
+//         // console.log("the holiday value is :" , holidayPackages.value)
+
+//     } catch (error) {
+//         console.log("The error is : ", error)
+//     }
+// }
+
+// fetchPackages()
+
+
 
 </script>
 

@@ -40,7 +40,7 @@
 
             <v-row style="height: 100%; max-height: 580px; overflow: hidden;">
                 <v-col cols="6">
-                    <v-col cols="12" v-for="item in data.slice(0,3)" :key="item.id" class="p-2">
+                    <v-col cols="12" v-for="item in cityStore.data.slice(0,3)" :key="item.id" class="p-2">
                         <div class="images-section" :style="{ backgroundImage: `url(${item.main_image})` }">
                             <div class="overlay"></div>
                             <p class="image-text m-0">
@@ -70,22 +70,14 @@
 
 <script setup>
 
-import axios from 'axios';
-import { ref } from 'vue'
-import { da } from 'vuetify/locale';
+import { ref ,onMounted } from 'vue'
+import { Store } from '@/store/CityStore';
 
+const cityStore = Store();
 
-
-const data = ref([]);
-
-const fetchCity = async () => {
-    const response = await axios.get("https://tripgoeasy.trackitinerary.com/apis/packages/package_category_with_city")
-    // console.log("the city is :", response.data.data.data)
-    data.value = response.data.data.data
-    // console.log("the data is :", data.value)
-}
-
-fetchCity()
+onMounted(() => {
+  cityStore.fetchDestinationCity();
+});
 
 
 const imageColumns = ref([

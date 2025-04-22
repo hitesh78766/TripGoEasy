@@ -37,7 +37,7 @@
                 </button>
             </v-col>
 
-            <v-col lg="1" class="p-0" v-for="(item) in data" :key="item.id">
+            <v-col lg="1" class="p-0" v-for="(item) in cityStore.data" :key="item.id">
                 <router-link :to="`/state/${item.name.toLowerCase()}`">
                     <button>
                         <img :src="item.main_image" alt="" class="image">
@@ -64,20 +64,17 @@
 
 <script setup>
 import Dialog from './Dialog.vue';
-import { ref , watch} from 'vue'
-import axios from 'axios';
+import { ref , watch ,onMounted} from 'vue'
+import { Store } from '@/store/CityStore';
 
-const data = ref([])
+
 const showDialog = ref(false)
 
-const fetchHeaderCities = async () => {
-    const response = await axios.get("https://tripgoeasy.trackitinerary.com/apis/packages/package_category_with_city_tge")
-    // console.log("the header  response is :" , response.data.data)
-    data.value = response.data.data
-    // console.log("the data value is :" , data.value)
-}
+const cityStore = Store();
 
-fetchHeaderCities()
+onMounted(() => {
+  cityStore.fetchHeaderCities();
+});
 
 
 const selectedButton = ref('tour') 
@@ -87,6 +84,7 @@ const selectButton = (buttonName) => {
     showDialog.value = true
   }
 }
+
 // Reset to 'tour' when dialog is closed
 watch(showDialog, (newVal) => {
     // console.log("the new value is :" , newVal)
