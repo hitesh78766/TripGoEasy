@@ -1,3 +1,4 @@
+
 <template>
     <section class="header-section">
 
@@ -37,7 +38,7 @@
                 </button>
             </v-col>
 
-            <v-col lg="1" class="p-0" v-for="(item) in data" :key="item.id">
+            <v-col lg="1" class="p-0" v-for="(item) in cityStore.data" :key="item.id">
                 <router-link :to="`/state/${item.name.toLowerCase()}`">
                     <button>
                         <img :src="item.main_image" alt="" class="image">
@@ -48,7 +49,7 @@
 
             <v-col cols="12" md="2">
                 <div class="multibleBtns">
-                    <a href="javascript:void(0)" :class="{ active: selectedButton === 'tour' }"
+                    <a href="" :class="{ active: selectedButton === 'tour' }"
                         @click="selectButton('tour')">Tour</a>
                     <button class="activities-btn" :class="{ active: selectedButton === 'activities' }"
                         @click="selectButton('activities')">Activities</button>
@@ -64,80 +65,27 @@
 
 <script setup>
 import Dialog from './Dialog.vue';
-import { ref , watch} from 'vue'
-import axios from 'axios';
+import { ref , watch , onMounted} from 'vue'
+import {headerCityStore} from '@/stores/storeHeaderCity'
+// import axios from 'axios';
 
-// const data = ref(
-//     [
-
-//         {
-//             id: 1,
-//             URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_images%2Fcity_image_1724843025_66cf041115373.png&w=256&q=75",
-//             text: "Bangkok"
-//         },
-
-//         {
-//             id: 2,
-//             URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_images%2Fcity_image_1724481008_66c97df04a1b0.png&w=256&q=75",
-//             text: "Andaman"
-//         },
-
-//         {
-//             id: 3,
-//             URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_images%2Fcity_image_1724488009_66c9994919144.png&w=256&q=75",
-//             text: "Kashmir"
-//         },
-
-//         {
-//             id: 4,
-//             URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_images%2Fcity_image_1724843801_66cf07193cdf4.png&w=256&q=75",
-//             text: "Bali"
-//         },
-
-//         {
-//             id: 5,
-//             URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_images%2Fcity_image_1724480959_66c97dbf00ca4.png&w=256&q=75",
-//             text: "Himachal"
-//         },
-
-//         {
-//             id: 6,
-//             URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_images%2Fcity_image_1724426323_66c8a853f3b01.png&w=256&q=75",
-//             text: "Uttrakhand"
-//         },
-
-//         {
-//             id: 7,
-//             URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_images%2Fcity_image_1724481322_66c97f2a688b7.png&w=256&q=75",
-//             text: "Kerala"
-//         },
-
-//         {
-//             id: 8,
-//             URL: "https://tripgoeasy.trackitinerary.com/site/images/city_images/city_image_1724412028_66c8707cdfe0d.svg",
-//             text: "Goa"
-//         },
-//         {
-//             id: 9,
-//             URL: "https://tripgoeasy.com/_next/image?url=https%3A%2F%2Ftripgoeasy.trackitinerary.com%2Fsite%2Fimages%2Fcity_images%2Fcity_image_1724481679_66c9808f9bb57.png&w=256&q=75",
-//             text: "Rajasthan"
-//         },
-
-
-//     ]
-// )
-
-const data = ref([])
+// const data = ref([])
 const showDialog = ref(false)
 
-const fetchHeaderCities = async () => {
-    const response = await axios.get("https://tripgoeasy.trackitinerary.com/apis/packages/package_category_with_city_tge")
-    // console.log("the header  response is :" , response.data.data)
-    data.value = response.data.data
-    // console.log("the data value is :" , data.value)
-}
+// const fetchHeaderCities = async () => {
+//     const response = await axios.get("https://tripgoeasy.trackitinerary.com/apis/packages/package_category_with_city_tge")
+//     // console.log("the header  response is :" , response.data.data)
+//     data.value = response.data.data
+//     // console.log("the data value is :" , data.value)
+// }
 
-fetchHeaderCities()
+// fetchHeaderCities()
+
+const cityStore = headerCityStore()
+
+onMounted(() => {
+  cityStore.fetchHeaderCities()
+})
 
 
 const selectedButton = ref('tour') 
@@ -149,7 +97,7 @@ const selectButton = (buttonName) => {
 }
 // Reset to 'tour' when dialog is closed
 watch(showDialog, (newVal) => {
-    console.log("the new value is :" , newVal)
+    // console.log("the new value is :" , newVal)
   if (!newVal) {
     selectedButton.value = 'tour'
   }
@@ -254,3 +202,7 @@ watch(showDialog, (newVal) => {
     color: #ca1c26 !important;
 }
 </style>
+
+
+
+
