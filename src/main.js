@@ -1,6 +1,7 @@
 
 import { registerPlugins } from '@/plugins'
 import router from './router';
+import { createPinia } from 'pinia';
 // Import Bootstrap CSS and JS
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
@@ -14,4 +15,5 @@ const app = createApp(App)
 
 registerPlugins(app)
 app.use(router)
+app.use(createPinia())
 app.mount('#app')
