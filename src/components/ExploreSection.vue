@@ -26,10 +26,11 @@
       <!-- v-tabs css  -->
       <v-container>
 
-        <v-tabs v-model="selectedTab" background-color="transparent" grow slider-color="transparent"
-          class="d-flex align-center justify-center text-uppercase py-3 px-3">
+        <v-tabs v-model="selectedTab" background-color="transparent" slider-color="transparent"
+          class="d-flex align-center justify-center text-uppercase py-3 px-3 ">
 
-          <v-tab value="Tour" class="px-4 py-1 rounded-pill" :class="selectedTab === 'Tour' ? 'bg-light' : ''">
+          <div class="d-flex align-items-center justify-content-center w-100">
+            <v-tab value="Tour" class="px-4 py-1 rounded-pill" :class="selectedTab === 'Tour' ? 'bg-light' : ''">
             <p :class="selectedTab === 'Tour' ? 'text-dark' : 'text-light'" class="m-0 font-weight-regular btn-option">
               Tour
             </p>
@@ -52,12 +53,14 @@
               class="m-0 font-weight-regular btn-option">
               Railway</p>
           </v-tab>
+          </div>
         </v-tabs>
 
         <v-tabs-window v-model="selectedTab">
           <!-- Tour Tab Content -->
           <v-tabs-window-item class="d-flex justify-content-center" value="Tour">
-            <v-menu location="bottom" :close-on-content-click="false" :close-on-scroll="true" offset-y v-if="selectedTab === 'Tour'">
+            <v-menu location="bottom" :close-on-content-click="false" :close-on-scroll="true" offset-y
+              v-if="selectedTab === 'Tour'">
               <template v-slot:activator="{ props }" v-if="selectedTab === 'Tour'">
                 <input v-bind="props" type="text" class="bg-light rounded-pill input-box" @input="handleScroll"
                   placeholder="Search for Himachal" />
@@ -92,15 +95,16 @@
                 </v-card-text>
               </VCard>
             </v-menu>
-            
-            <div class="search-icon">
+
+            <div class="search-icon" v-if="selectedTab === 'Tour'">
               <i class="fas fa-search"></i>
             </div>
           </v-tabs-window-item>
 
           <!-- Activities Tab Content -->
           <v-tabs-window-item class="d-flex justify-content-center" value="Activities">
-            <div class="d-flex align-center justify-content-between activity-section" v-if="selectedTab === 'Activities'">
+            <div class="d-flex align-center justify-content-between activity-section"
+              v-if="selectedTab === 'Activities'">
               <div style="border-right: 1px solid #01008036;">
                 <div class="d-flex align-center">
                   <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
@@ -144,7 +148,8 @@
 
           <!-- Flight Tab Content -->
           <v-tabs-window-item class="d-flex justify-content-center" value="Flight">
-            <div class="d-flex align-center justify-content-between position-relative activity-section" v-if="selectedTab === 'Flight'">
+            <div class="d-flex align-center justify-content-between position-relative activity-section"
+              v-if="selectedTab === 'Flight'">
               <div style="border-right: 1px solid #01008036;">
                 <div class="d-flex align-center">
                   <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
@@ -196,12 +201,16 @@
                 </div>
               </div>
             </div>
-            <p class="text-uppercase coming-soon-text">Coming Soon</p>
+            <p class="text-uppercase coming-soon-text" v-if="selectedTab === 'Flight' || selectedTab === 'Railway'">
+              Coming Soon
+            </p>
+
           </v-tabs-window-item>
 
           <!-- Railway Tab Content -->
           <v-tabs-window-item class="d-flex justify-content-center" value="Railway">
-            <div class="d-flex align-center justify-content-between position-relative activity-section" v-if="selectedTab === 'Railway'">
+            <div class="d-flex align-center justify-content-between position-relative activity-section"
+              v-if="selectedTab === 'Railway'">
               <div style="border-right: 1px solid #01008036;">
                 <div class="d-flex align-center">
                   <img src="https://tripgoeasy.com/Assets/Icons/herolocation.svg" alt="" />
@@ -253,17 +262,16 @@
                 </div>
               </div>
             </div>
-            <p class="text-uppercase coming-soon-text">Coming Soon</p>
+            <p class="text-uppercase coming-soon-text" v-if="selectedTab === 'Flight' || selectedTab === 'Railway'">
+              Coming Soon
+            </p>
           </v-tabs-window-item>
 
         </v-tabs-window>
       </v-container>
 
-
       <!-- Drawer -->
-      <Drawer v-model:isDrawerOpen="drawer"  />
-
-
+      <Drawer v-model:isDrawerOpen="drawer" />
 
     </div>
   </template>
@@ -291,7 +299,6 @@ const drawer = ref(false)
 </script>
 
 <style scoped>
-
 .bg-image {
   background-image: url("https://tripgoeasy.com/Assets/Images/hero_banner.jpg");
   height: 532px;

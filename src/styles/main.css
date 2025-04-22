@@ -1,3 +1,7 @@
 body {
     font-family: 'Inter', sans-serif !important;
   }
+
+  .v-input__details{
+    display: none !important;
+}

@@ -79,14 +79,14 @@
                                 <span>{{ selectedLabel }}</span>
                             </v-btn>
                         </div>
-                        
+
                         <!-- Button with selected family status -->
                         <div style="border-bottom: 4px solid #ca1c26;" class="ms-3">
-                            <v-btn v-if="selectedFamilyStatus"
+                            <v-btn v-if="selectedCategory"
                                 class="place-select-div d-flex align-items-center justify-content-center">
-                                <img src="https://tripgoeasy.com/_next/static/media/pax.615c4271.svg" alt=""
+                                <img src="https://tripgoeasy.com/_next/static/media/pax.615c4271.svg" alt="Family icon"
                                     class="me-2" />
-                                <span>{{ selectedFamilyStatus.label }}</span>
+                                <span>{{ selectedCategory}}</span>
                             </v-btn>
                         </div>
 
@@ -157,15 +157,25 @@
                 </div>
 
                 <!-- how much night -->
-                <div v-else-if="selectNight && !selectedFamilyStatus">
+                <div v-else-if="selectNight">
                     <p class="text-start font-weight-bold mt-3 mb-4 month-trevelling-pehra">
                         Who is travelling with you?
                     </p>
 
                     <div class="d-flex align-items-center justify-content-between" style="width: 630px;">
-                        <div v-for="(item, index) in familyTypes" :key="index"
+                        <div v-for="(item, index) in familyStatusDataSet1" :key="index"
+                            @click="selectFamilyStatus(item)"
                             class="d-flex align-center justify-content-center family-status">
-                            <div class="content-family-status" @click="selectFamilyStatus(item)">
+                            <div class="content-family-status">
+                                <img :src="item.img" :alt="item.label" width="62" height="61" />
+                                <p class="m-0" :style="'color: ' + item.color">{{ item.label }}</p>
+                            </div>
+                        </div>
+
+                        <div v-for="(item, index) in familyStatusDataSet2" :key="index"
+                            @click="selectFamilyStatus(item)"
+                            class="d-flex align-center justify-content-center family-status">
+                            <div class="content-family-status">
                                 <img :src="item.img" :alt="item.label" width="62" height="61" />
                                 <p class="m-0" :style="'color: ' + item.color">{{ item.label }}</p>
                             </div>
@@ -174,7 +184,7 @@
                 </div>
 
                 <!-- show the family status -->
-                <div v-else-if="selectedFamilyStatus">
+                <div v-if="showPersonalDetailsForm">
                     <p class="text-start font-weight-bold mt-3 mb-4 month-trevelling-pehra">
                         Enter your details to personalise your trip
                     </p>
@@ -217,6 +227,64 @@
                         </div>
                     </div>
                 </div>
+
+                <div v-else-if="selectedCategory === 'Family' || selectedCategory === 'Group'">
+                    <div>
+                        <p class="text-start font-weight-bold mt-3 m-0 month-trevelling-pehra">
+                            How many of you are travelling?
+                        </p>
+                        <p class="m-0 rooms-taken">Number of rooms</p>
+                        <v-menu v-model="roomMenu" :close-on-content-click="false" offset-y>
+                            <template #activator="{ props }">
+                                <v-btn class="bg-white" v-bind="props">
+                                    {{ count }} Room {{ countAdult }} Adults
+                                </v-btn>
+                            </template>
+                            <v-list class="bg-white text-black" style="width: 450px;">
+                                <v-list-item>
+                                    <v-list-item>
+
+                                        <div class="d-flex align-items-center justify-content-between pb-3"
+                                            style="border-bottom: 1px solid #e5e7eb;">
+                                            <p class="m-0 fw-bold">Rooms</p>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <v-btn class="bg-white me-2 btns-minus" @click="count--"
+                                                    :disabled="count <= 0">-</v-btn>
+                                                <p class="m-0 ms-2 me-2 fw-bold">{{ count }}</p>
+                                                <v-btn class=" bg-white ms-2 btns" @click="count++">+</v-btn>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex align-items-center justify-content-between mt-2 mb-1">
+                                            <div class="">
+                                                <p class="m-0 mb-2 fw-bold">Adults (12+)</p>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <v-btn class="bg-white me-2 btns-minus" @click="countAdult--"
+                                                        :disabled="countAdult <= 1">-</v-btn>
+                                                    <p class="m-0 ms-2 me-2 fw-bold">{{ countAdult }}</p>
+                                                    <v-btn class="bg-white ms-2 btns" @click="countAdult++">+</v-btn>
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <p class="m-0 mb-2 fw-bold">Children</p>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <v-btn class="bg-white me-2 btns-minus" @click="countChildren--"
+                                                        :disabled="countChildren <= 0">-</v-btn>
+                                                    <p class="m-0 ms-2 me-2 fw-bold">{{ countChildren }}</p>
+                                                    <v-btn class="bg-white ms-2 btns" @click="countChildren++">+</v-btn>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </v-list-item>
+
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
+
+                    </div>
+                </div>
+
             </div>
         </v-navigation-drawer>
     </div>
@@ -257,10 +325,15 @@ const selectedDate = ref(null)
 const isInput = ref(null)
 const selectNight = ref(false)
 const selectedLabel = ref('')
-// selected item (null by default)
-const selectedFamilyStatus = ref(null)
+
+const showPersonalDetailsForm = ref(false)
+const selectedCategory = ref('') // this variable is for show the input div and other div with the onclick of the button in family stauts
 const dialog = ref(false)
 
+const roomMenu = ref(false);
+const count = ref(0)
+const countAdult = ref(1)
+const countChildren = ref(0)
 
 const allStates = [
     'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -308,7 +381,6 @@ const selectMonth = (monthName) => {
     showDatePicker.value = true
 }
 
-// this will select the date form the calendar
 const onDateSelected = (date) => {
     selectedDate.value = date
     showDatePicker.value = false
@@ -325,7 +397,10 @@ const inputField = (state) => {
 const limitedState = [
     'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
     'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
-    'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra',
+    'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
+    'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+    'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
+    'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
 ]
 
 const filteredLimitedStates = computed(() => {
@@ -349,7 +424,7 @@ const selectNightItem = (label) => {
     selectNight.value = true
 }
 
-const familyTypes = [
+const familyStatusDataSet1 = ([
     {
         label: 'Solo',
         img: 'https://tripgoeasy.com/_next/static/media/solo.78498e80.svg',
@@ -360,6 +435,9 @@ const familyTypes = [
         img: 'https://tripgoeasy.com/_next/static/media/couple.a654a41b.svg',
         color: 'rgb(202, 28, 38)',
     },
+]);
+
+const familyStatusDataSet2 = ([
     {
         label: 'Family',
         img: 'https://tripgoeasy.com/_next/static/media/family.cc68877b.svg',
@@ -370,19 +448,20 @@ const familyTypes = [
         img: 'https://tripgoeasy.com/_next/static/media/group.8249706e.svg',
         color: 'rgb(129, 69, 0)',
     },
-]
-// show the family status
-const selectFamilyStatus = (item) => {
-    selectedFamilyStatus.value = item
-}
+]);
 
-// items for input in family status
+function selectFamilyStatus(item) {
+    // console.log("the category is :" , item)
+    selectedCategory.value = item.label;
+    showPersonalDetailsForm.value = item.label === 'Solo' || item.label === 'Couple';
+}
 
 const inputs = [
     { placeholder: 'Name', icon: 'https://tripgoeasy.com/_next/static/media/usericon.0594d09f.svg' },
     { placeholder: 'Phone No.', icon: 'https://tripgoeasy.com/_next/static/media/phoneicon.9c043e71.svg' },
     { placeholder: 'Email', icon: 'https://tripgoeasy.com/_next/static/media/emailicon.adc86b0a.svg' }
 ];
+
 </script>
 
 
@@ -544,5 +623,29 @@ const inputs = [
     font-size: 20px;
     font-weight: 400;
     line-height: 25.14px;
+}
+
+
+.rooms-taken {
+    color: rgba(55 58 59 1);
+    font-size: 18px;
+}
+
+
+.btns-minus{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100% !important;
+    min-width: 2rem !important;
+
+}
+.btns{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100% !important;
+    min-width: 2rem !important;
+    font-weight: 700;
+    color: rgba(1, 0, 128, 1) !important;
+    background: rgba(246, 246, 246, 1);
 }
 </style>
